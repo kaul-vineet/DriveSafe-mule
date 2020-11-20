@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <configuration-properties file="mule-artifact.properties"/>
+    <http:listener-config doc:id="5f19533f-b383-4659-8b0d-c565503e1b50" doc:name="CloudHub HTTP" doc:timestamp="1602915986633" name="cloudhub_http">
+        <http:listener-connection host="${cloudhub_http.Connection.host.value}" port="${cloudhub_http.Connection.port.value}"/>
+    </http:listener-config>
+    <salesforce:sfdc-config doc:id="2dab60dd-b2cc-4315-8b87-abee84f7102f" doc:name="Salesforce" doc:timestamp="1602916132127" name="salesforce">
+        <salesforce:basic-connection password="${salesforce.General.password.value}" securityToken="${salesforce.General.securityToken.value}" username="${salesforce.General.username.value}"/>
+    </salesforce:sfdc-config>
+    <flow doc:id="85e91ef1-c598-4293-b658-c09e25742f29" doc:name="HTTP to Salesforce" doc:timestamp="" name="http_to_salesforce">
+        <http:listener allowedMethods="POST" config-ref="cloudhub_http" doc:id="1a566454-cd88-484d-ae4b-4c1e7b06c44a" doc:name="Listener" doc:timestamp="1602918652271" path="/tardisviolationservice/V2/violation">
+            <http:response>
+                <http:body>#[%dw 2.0&#13;
+output application/json  &#13;
+---&#13;
+{&#13;
+  "VIN": payload.VIN,&#13;
+  "latitude": payload.latitude,&#13;
+  "longitude": payload.longitude,&#13;
+  "type": payload."type",&#13;
+  "value": payload.value&#13;
+}]</http:body>
+            </http:response>
+        </http:listener>
+        <ee:transform doc:id="f090e48f-aa57-4712-b124-ff6ade4924fe" doc:name="Transform" doc:timestamp="1602920236554">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java  
+---
+{
+  "type": payload."type",
+  VIN: payload.VIN,
+  value: payload.value,
+  latitude: payload.latitude,
+  longitude: payload.longitude
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <ee:transform doc:id="b2114d88-fc98-4384-b67b-2b2869aa4153" doc:name="Transform" doc:timestamp="1602929094595">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java  
+---
+[
+  {
+    Violation_Code_c__c: payload."type",
+    Vehicle__c: payload.VIN,
+    Value__c: payload.value,
+    Violation_Geolocation_Long__c: payload.longitude,
+    	Violation_Geolocation_Lat__c: payload.latitude
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <salesforce:publish-platform-event-message config-ref="salesforce" doc:id="fcf03a14-84e4-43db-b59e-924c553d884c" doc:name="Publish Platform Event Message" doc:timestamp="1602919893446" platformEventName="Violation_Events__e"/>
+    </flow>
+</mule>

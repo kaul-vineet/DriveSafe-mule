@@ -1,0 +1,26 @@
+{
+  "configs": [
+    "mule-config.xml"
+  ],
+  "secureProperties": [
+    "salesforce.General.securityToken.value",
+    "cloudhub_http.Connection.host.value",
+    "cloudhub_http.Connection.port.value",
+    "salesforce.General.username.value",
+    "salesforce.General.password.value"
+  ],
+  "redeploymentEnabled": true,
+  "name": "tardisviolationserviceV2",
+  "minMuleVersion": "4.2.2",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedResources": []
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

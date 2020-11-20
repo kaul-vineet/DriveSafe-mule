@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="violation" format="json">
+      <types:example format="json"><![CDATA[{
+  "pwd": "pwd",
+  "uid": "uid",
+  "token": "token",
+  "type": "type",
+  "VIN": "vin",
+  "value": 1,
+  "latitude": 1,
+  "longitude": 1
+}]]></types:example>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#b82224a7-24b9-40d6-b4b6-1d1a514f368e">
+    <types:processor-declaration/>
+  </types:enrichment>
+  <types:enrichment select="#00c40587-a1b3-48f9-85c8-d7f55f6e6126">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="violation"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="violation"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#70f2b9fc-115a-4dcc-bb93-b17d9671f186">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="violation"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="violation"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#3a287079-c39e-4d02-a92e-3b98244aaf1b">
+    <types:processor-declaration/>
+  </types:enrichment>
+  <types:enrichment select="#e9ffbe53-d89b-42c7-82e4-da2e4f3577eb">
+    <types:processor-declaration/>
+  </types:enrichment>
+  <types:enrichment select="#ed484e75-e15b-40d1-85de-ec92d90705da">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="violation"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#c3598039-c5bb-4291-8a3e-301b23900f32">
+    <types:processor-declaration/>
+  </types:enrichment>
+  <types:enrichment select="#1a566454-cd88-484d-ae4b-4c1e7b06c44a">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="violation"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#f090e48f-aa57-4712-b124-ff6ade4924fe">
+    <types:processor-declaration/>
+  </types:enrichment>
+  <types:enrichment select="#b2114d88-fc98-4384-b67b-2b2869aa4153">
+    <types:processor-declaration/>
+  </types:enrichment>
+</types:mule>
