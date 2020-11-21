@@ -8,7 +8,7 @@
         <salesforce:basic-connection password="${salesforce.General.password.value}" securityToken="${salesforce.General.securityToken.value}" username="${salesforce.General.username.value}"/>
     </salesforce:sfdc-config>
     <flow doc:id="85e91ef1-c598-4293-b658-c09e25742f29" doc:name="HTTP to Salesforce" doc:timestamp="" name="http_to_salesforce">
-        <http:listener allowedMethods="POST" config-ref="cloudhub_http" doc:id="1a566454-cd88-484d-ae4b-4c1e7b06c44a" doc:name="Listener" doc:timestamp="1602918652271" path="/tardisviolationservice/V2/violation">
+        <http:listener allowedMethods="POST" config-ref="cloudhub_http" doc:id="1a566454-cd88-484d-ae4b-4c1e7b06c44a" doc:name="Listener" doc:timestamp="1605943172013" path="/tardisviolationservice/V2/violation">
             <http:response>
                 <http:body>#[%dw 2.0&#13;
 output application/json  &#13;
@@ -22,32 +22,18 @@ output application/json  &#13;
 }]</http:body>
             </http:response>
         </http:listener>
-        <ee:transform doc:id="f090e48f-aa57-4712-b124-ff6ade4924fe" doc:name="Transform" doc:timestamp="1602920236554">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/java  
----
-{
-  "type": payload."type",
-  VIN: payload.VIN,
-  value: payload.value,
-  latitude: payload.latitude,
-  longitude: payload.longitude
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-        <ee:transform doc:id="b2114d88-fc98-4384-b67b-2b2869aa4153" doc:name="Transform" doc:timestamp="1602929094595">
+        <ee:transform doc:id="b2114d88-fc98-4384-b67b-2b2869aa4153" doc:name="Transform" doc:timestamp="1605944064750">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/java  
 ---
 [
   {
-    Violation_Code_c__c: payload."type",
-    Vehicle__c: payload.VIN,
-    Value__c: payload.value,
-    Violation_Geolocation_Long__c: payload.longitude,
-    	Violation_Geolocation_Lat__c: payload.latitude
+    Violation_Code_c__c: payload..Type[0],
+    Vehicle__c: payload..VIN[0],
+    Value__c: payload..Value[0],
+    Violation_Geolocation_Long__c: payload..Longitude[0],
+    	Violation_Geolocation_Lat__c: payload..Latitude[0]
   }
 ]]]></ee:set-payload>
             </ee:message>

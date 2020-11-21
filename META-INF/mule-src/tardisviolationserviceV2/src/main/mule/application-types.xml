@@ -3,14 +3,11 @@
   <types:catalog>
     <types:type name="violation" format="json">
       <types:example format="json"><![CDATA[{
-  "pwd": "pwd",
-  "uid": "uid",
-  "token": "token",
-  "type": "type",
+  "Type": "type",
   "VIN": "vin",
-  "value": 1,
-  "latitude": 1,
-  "longitude": 1
+  "Value": 1,
+  "Latitude": 1,
+  "Longitude": 1
 }]]></types:example>
     </types:type>
   </types:catalog>
@@ -73,7 +70,13 @@
     </types:processor-declaration>
   </types:enrichment>
   <types:enrichment select="#f090e48f-aa57-4712-b124-ff6ade4924fe">
-    <types:processor-declaration/>
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="violation"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
   </types:enrichment>
   <types:enrichment select="#b2114d88-fc98-4384-b67b-2b2869aa4153">
     <types:processor-declaration/>
